@@ -39,9 +39,10 @@ unsigned char state = 0;			//State of automation model
 	PORTB = (1<<PB5)|(1<<PB4)|(1<<PB3)|(1<<PB2);
 	DDRB = (0<<PB5)|(0<<PB4)|(0<<PB3)|(0<<PB2);
 	
-	//Set out for PWM
-	PORTD = (1<<PD6);
-	DDRD = (1<<DDD6);
+	//Set out for PWM PD6
+	//Set out for mesure perfomance PD1
+	PORTD = (1<<PD6)|(1<<PD1);
+	DDRD = (1<<DDD6)|(1<<DDD1);
 
 	//Settings PWM
 	TCCR0A = 0b10000011;
@@ -65,6 +66,8 @@ int main(void)
 		if (flag)	//Wait flag interrupt (frequency 7812,5 Hz)
 		{
 			flag = false;	//Reset flag
+			
+			PORTD = (1<<PD1);
 			
 			//Increment ptr to current sample
 			sample++;
@@ -140,6 +143,7 @@ int main(void)
 					break;
 			}
 			
+			PORTD = (0<<PD1);
 		}
 		else
 			sleep_cpu();
